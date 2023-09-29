@@ -1,0 +1,43 @@
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset
+data = load_iris()
+X = data.data  # Features (sepal length, sepal width, petal length, petal width)
+y = data.target  # Target (species: 0=setosa, 1=versicolor, 2=virginica)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Logistic Regression model (you can use other classifiers as well)
+model = LogisticRegression()
+
+# Train the model on the training data
+model.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_report = classification_report(y_test, y_pred)
+
+print("Accuracy:", accuracy)
+print("Confusion Matrix:\n", conf_matrix)
+print("Classification Report:\n", class_report)
+
+# Visualize the actual vs. predicted species (optional)
+plt.scatter(X_test[:, 2], X_test[:, 3], c=y_test, cmap=plt.cm.Paired, label="Actual")
+plt.scatter(X_test[:, 2], X_test[:, 3], c=y_pred, cmap=plt.cm.Paired, marker='x', label="Predicted")
+plt.xlabel("Petal Length")
+plt.ylabel("Petal Width")
+plt.title("Actual vs. Predicted Iris Species")
+plt.legend()
+plt.show()
